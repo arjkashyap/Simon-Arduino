@@ -9,6 +9,8 @@ Requirements:
 How to setup:
     Follow the Circuit Diagram From Circuit.png.
     The connections are pretty Easy.
+    Connect the Arduiono to computer and Upload the code.
+    ( Do check the port before uploading from tools > port )
     
 Game-play:
     Once the game starts, the led's will blink on and off
