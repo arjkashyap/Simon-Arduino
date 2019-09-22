@@ -9,8 +9,8 @@
 #define L4 11
 
 // LED Game-state pins
-#define L5 6
-#define L6 7
+#define L5 6            // Red
+#define L6 7           // Green
 
 // Push button pins
 #define B1 1
@@ -45,10 +45,12 @@ void loop() {
   int b1_val = digitalRead(1), b2_val = digitalRead(2), b3_val = digitalRead(3), b4_val = digitalRead(4);
 
   // Game starts
-  level_one();
-  
-  
-    
+  if(level_one()){
+    digitalWrite(L7, HIGH);   
+  }
+  else{
+    digitalWrite(L6, HIGH);
+  }
 }
 
 int ledResponse(){
@@ -90,6 +92,7 @@ int ledResponse(){
   return 0;
 }
 
+// Level one pattern display and match check
 bool levelOne(){
   int subLvl = 3;
   int current = 0;
@@ -108,12 +111,12 @@ bool levelOne(){
       btn = btnPressed();
       if( !(patternMatch( ptrn[i], btn )) ){
         Serial.println("Pattern mismatch")
-        exit(0)
+        return false;
       }
     }
     current += 1;
   }
-   
+   return true;
 }
 
 // Displays the Led pattern passed through array of pin numbers
