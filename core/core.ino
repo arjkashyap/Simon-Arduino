@@ -105,7 +105,11 @@ bool levelOne(){
     disp_ptrn(ptrn, 1, limit);
     for(int i = 0; i < limit; i++){
       int btn;
-      
+      btn = btnPressed();
+      if( !(patternMatch( ptrn[i], btn )) ){
+        Serial.println("Pattern mismatch")
+        exit(0)
+      }
     }
     current += 1;
   }
@@ -123,8 +127,26 @@ void disp_ptrn(int ptrn[], int lvl){
   }
 }
 
+// Detects and Returns the pin value of the button pressed
+int btnPressed(){
+  if( digitalRead(B1) == LOW )
+    return B1;
+  if( digitalRead(B2) == LOW)
+    return B2;
+  if( digitalRead(B3) == LOW )
+    return B3;
+  if( digitalRead(B4) == LOW)
+    return B4;
+  return 0;
+}
 
-
+// Returns true if the correct button is pushed else False
+bool patternMatch(int ledPin, int btnPin){
+    if( (ledPin == L1 && btnPin == B1) || (ledPin == L2 && btnPin == B2) || (ledPin == L3 && btnPin == B3) || (ledPin == L4 && btnPin == B4)){
+      return true;  
+    }
+    return false;
+}
 
 
 
