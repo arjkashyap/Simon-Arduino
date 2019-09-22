@@ -1,5 +1,7 @@
 // Main Module
 
+// current line = 104
+
 // LED Pattern pins
 #define L1 8
 #define L2 9
@@ -101,19 +103,24 @@ bool levelOne(){
       ptrn[i] = pin_num;
     }
     disp_ptrn(ptrn, 1, limit);
+    for(int i = 0; i < limit; i++){
+      int btn;
+      
+    }
     current += 1;
   }
    
 }
 
+// Displays the Led pattern passed through array of pin numbers
 void disp_ptrn(int ptrn[], int lvl){
-  int delay_time;
+  int delay_time;               // Varies with level
   if( lvl == 1 )  
     delay_time = 1000;
   for( int i = 0; i < limit; i++ ){
-      
+      digitalWrite(ptrn[i], HIGH);
+      delay(delay_time);
   }
-  
 }
 
 
