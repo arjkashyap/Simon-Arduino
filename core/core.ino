@@ -1,6 +1,6 @@
 // Main Module
 
-// current line = 104
+// Start debuging from lvl 1 function line 97
 
 // LED Pattern pins
 #define L1 8
@@ -44,12 +44,15 @@ void loop() {
   // Read the pushbutton values
   int b1_val = digitalRead(1), b2_val = digitalRead(2), b3_val = digitalRead(3), b4_val = digitalRead(4);
 
+  Serial.println("Level One value");
+  Serial.println(levelOne());
   // Game starts
-  if(level_one()){
-    digitalWrite(L7, HIGH);   
+  if(levelOne()){
+    digitalWrite(L6, HIGH);   
   }
   else{
-    digitalWrite(L6, HIGH);
+    digitalWrite(L5, HIGH);
+    exit(0);
   }
 }
 
@@ -57,6 +60,7 @@ int ledResponse(){
   // Turn LED High if the button is pressed
   // INPUT_PULLUP means the pushbutton's logic is inverted. It goes
   // HIGH when it's open, and LOW when it's pressed
+  int b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   if( b1_val == HIGH) {
     digitalWrite(L1, LOW);
   }
@@ -73,7 +77,7 @@ int ledResponse(){
     return L2;  
   }
   
-  if( b3_val == HIGH) {0
+  if( b3_val == HIGH) {
     digitalWrite(L3, LOW);
   }
   else{
@@ -96,8 +100,7 @@ int ledResponse(){
 bool levelOne(){
   int subLvl = 3;
   int current = 0;
-  bool success = true;
-  while( current < sublvl ){
+  while( current < subLvl ){
     int ptrn[4];        // Led pin patterns
     int limit = 4;
     // Store random led number
@@ -105,12 +108,17 @@ bool levelOne(){
       int pin_num = random(L1, L4 + 1);
       ptrn[i] = pin_num;
     }
+    for( int i = 0; i < limit; i++ )
+      Serial.println(ptrn[i]);
+      
     disp_ptrn(ptrn, 1, limit);
     for(int i = 0; i < limit; i++){
       int btn;
       btn = btnPressed();
+      Serial.println("Button value is:");
+      Serial.println(btn);
       if( !(patternMatch( ptrn[i], btn )) ){
-        Serial.println("Pattern mismatch")
+        Serial.println("Pattern mismatch");
         return false;
       }
     }
@@ -119,28 +127,45 @@ bool levelOne(){
    return true;
 }
 
-// Displays the Led pattern passed through array of pin numbers
-void disp_ptrn(int ptrn[], int lvl){
+// Displays the Led pattern passed through array of pin numbers 
+void disp_ptrn(int ptrn[], int lvl, int limit){
   int delay_time;               // Varies with level
   if( lvl == 1 )  
-    delay_time = 1000;
+    delay_time = 800;
   for( int i = 0; i < limit; i++ ){
       digitalWrite(ptrn[i], HIGH);
       delay(delay_time);
+      digitalWrite(ptrn[i], LOW);
   }
 }
 
 // Detects and Returns the pin value of the button pressed
 int btnPressed(){
-  if( digitalRead(B1) == LOW )
+ // Serial.println("B1");
+ // Serial.println(digitalRead(B1));
+ // Serial.println("B2");
+ // Serial.println(digitalRead(B2));
+ // Serial.println("B3");
+ // Serial.println(digitalRead(B3));
+ // Serial.println("B4");
+ // Serial.println(digitalRead(B4));
+  if( digitalRead(B1) == LOW ){
+    Serial.println("Condition satisfied B1");
     return B1;
-  if( digitalRead(B2) == LOW)
+  }
+  if( digitalRead(B2) == LOW){
+    Serial.println("Condition satisfied B1");
     return B2;
-  if( digitalRead(B3) == LOW )
+  }
+  if( digitalRead(B3) == LOW ){
+    Serial.println("Condition satisfied B1");
     return B3;
-  if( digitalRead(B4) == LOW)
+  }
+  if( digitalRead(B4) == LOW){
+    Serial.println("Condition satisfied B1");
     return B4;
-  return 0;
+  }
+
 }
 
 // Returns true if the correct button is pushed else False
