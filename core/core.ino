@@ -16,6 +16,7 @@
 #define B3 3
 #define B4 4
 
+
 void setup() {
   Serial.begin(9600);
   
@@ -41,8 +42,14 @@ void loop() {
   // Read the pushbutton values
   int b1_val = digitalRead(1), b2_val = digitalRead(2), b3_val = digitalRead(3), b4_val = digitalRead(4);
 
-  //Serial.println(b1_val);
+  // Game starts
+  level_one();
   
+  
+    
+}
+
+int ledResponse(){
   // Turn LED High if the button is pressed
   // INPUT_PULLUP means the pushbutton's logic is inverted. It goes
   // HIGH when it's open, and LOW when it's pressed
@@ -50,30 +57,64 @@ void loop() {
     digitalWrite(L1, LOW);
   }
   else{
-    digitalWrite(L1, HIGH);  
+    digitalWrite(L1, HIGH);
+    return L1;  
   }
+  
   if( b2_val == HIGH) {
     digitalWrite(L2, LOW);
   }
   else{
-    digitalWrite(L2, HIGH);  
+    digitalWrite(L2, HIGH);
+    return L2;  
   }
-  if( b3_val == HIGH) {
+  
+  if( b3_val == HIGH) {0
     digitalWrite(L3, LOW);
   }
   else{
-    digitalWrite(L3, HIGH);  
+    digitalWrite(L3, HIGH);
+    return L3;  
   }
+  
   if( b4_val == HIGH) {
     digitalWrite(L4, LOW);
   }
   else{
     digitalWrite(L4, HIGH);  
+    return L4;
   }
-
   
+  return 0;
 }
 
+bool levelOne(){
+  int subLvl = 3;
+  int current = 0;
+  bool success = true;
+  while( current < sublvl ){
+    int ptrn[4];        // Led pin patterns
+    int limit = 4;
+    // Store random led number
+    for(int i = 0; i < limit; i++){
+      int pin_num = random(L1, L4 + 1);
+      ptrn[i] = pin_num;
+    }
+    disp_ptrn(ptrn, 1, limit);
+    current += 1;
+  }
+   
+}
+
+void disp_ptrn(int ptrn[], int lvl){
+  int delay_time;
+  if( lvl == 1 )  
+    delay_time = 1000;
+  for( int i = 0; i < limit; i++ ){
+      
+  }
+  
+}
 
 
 
