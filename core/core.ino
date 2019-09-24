@@ -1,6 +1,9 @@
 // Main Module
 
 // Start debuging from lvl 1 function line 97
+// Wire for Buttons is not there
+// Led response does not reset to low.
+
 
 // LED Pattern pins
 #define L1 8
@@ -42,8 +45,9 @@ void setup() {
 void loop() {
   
   // Read the pushbutton values
-  int b1_val = digitalRead(1), b2_val = digitalRead(2), b3_val = digitalRead(3), b4_val = digitalRead(4);
-
+  int b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
+  Serial.println("Button 1at: ");
+  Serial.println(b1_val);
   Serial.println("Level One value");
   Serial.println(levelOne());
   // Game starts
@@ -51,6 +55,7 @@ void loop() {
     digitalWrite(L6, HIGH);   
   }
   else{
+    Serial.println("Circuit exit condition");
     digitalWrite(L5, HIGH);
     exit(0);
   }
@@ -63,9 +68,11 @@ int ledResponse(){
   int b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   if( b1_val == HIGH) {
     digitalWrite(L1, LOW);
+    
   }
   else{
     digitalWrite(L1, HIGH);
+   
     return L1;  
   }
   
@@ -115,6 +122,7 @@ bool levelOne(){
     for(int i = 0; i < limit; i++){
       int btn;
       btn = btnPressed();
+      ledResponse();
       Serial.println("Button value is:");
       Serial.println(btn);
       if( !(patternMatch( ptrn[i], btn )) ){
@@ -141,14 +149,14 @@ void disp_ptrn(int ptrn[], int lvl, int limit){
 
 // Detects and Returns the pin value of the button pressed
 int btnPressed(){
- // Serial.println("B1");
- // Serial.println(digitalRead(B1));
- // Serial.println("B2");
- // Serial.println(digitalRead(B2));
- // Serial.println("B3");
- // Serial.println(digitalRead(B3));
- // Serial.println("B4");
- // Serial.println(digitalRead(B4));
+  Serial.println("B1");
+  Serial.println(digitalRead(B1));
+  Serial.println("B2");
+  Serial.println(digitalRead(B2));
+ Serial.println("B3");
+ Serial.println(digitalRead(B3));
+ Serial.println("B4");
+  Serial.println(digitalRead(B4));
   if( digitalRead(B1) == LOW ){
     Serial.println("Condition satisfied B1");
     return B1;
