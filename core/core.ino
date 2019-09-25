@@ -47,7 +47,9 @@ void loop() {
   int b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   Serial.println("Game begins");
   
-  Serial.println(levelOne());
+  if(levelOne()){
+    Serial.println("Success");    
+  }
   delay(800);
   exit(0);
 }
@@ -55,31 +57,47 @@ void loop() {
 // Level one pattern display and match check
 bool levelOne(){
   // Display Led pattern for level one
-   displayPattern(1);    
+   int limit = 4;
+   int ptrn[limit];
+   displayPattern(1, ptrn, limit);
+   for(int i = 0; i < limit; i++)
+    Serial.println(ptrn[i]);    
    return true;
 }
 
 // Displays Led blink pattern for a level
-void displayPattern(int lvl){
-  int limit, delayTime;
+void displayPattern(int lvl, int ptrn[], int limit){
+  Serial.println("Function displayPattern");
+  int delayTime;
+  int correctButton;
   if(lvl == 1){
-    limit = 4;
     delayTime = 500;
   }
-  int ptrn[limit];
+ 
   for( int i = 0; i < limit; i++ ){
     int pin = random(L1, L4 + 1);         // Choose a random led pin
     Serial.println(pin);
+    ptrn[i] = pin;
     digitalWrite(pin, HIGH);              
     delay(delayTime);
     digitalWrite(pin, LOW);
     delay(delayTime);
   }
   Serial.println("Pattern complete");
+  
   return;
 }
 
-
-
+// Finds the button required to be pressed for a led pin passed as variable
+int buttonMatch(int ledPin){
+  if(ledPin == L1)
+    return B1;
+  else if ( ledPin == L2 )
+    return B2;
+  else if (ledPin == L3)
+    return B3;
+  else if ( ledPin == L4 )
+    return B4;
+}
 
 
