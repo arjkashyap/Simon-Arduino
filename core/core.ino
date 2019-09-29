@@ -21,6 +21,7 @@
 #define B3 4
 #define B4 5
 
+bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
 void setup() {
   Serial.begin(9600);
   
@@ -44,7 +45,7 @@ void setup() {
 void loop() {
   
   // Read the pushbutton values
-  bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
+ // bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   Serial.println("Game begins");
   Serial.println(b1_val);
  
@@ -53,18 +54,31 @@ void loop() {
   }
 
   delay(800);
-  
+  exit(0);
 }
 
 // Level one pattern display and match check
 bool levelOne(){
   // Display Led pattern for level one
-   int limit = 4;
+   
+   int limit = 4, correctButton = 0;
    int ptrn[limit];
    displayPattern(1, ptrn, limit);
-   for(int i = 0; i < limit; i++)
+   for(int i = 0; i < limit; i++){
     Serial.println(ptrn[i]);
-   
+    correctButton = buttonMatch(ptrn[i]);           // Stores the correct choice for button
+    Serial.print("Button required : ");
+    Serial.println(correctButton);
+    // Check if the incorrect button is pressed
+    
+    // Wait for button press
+    while(1){
+        Serial.println("waiting");         
+        if(checkButton(correctButton))
+          break;
+     }
+     Serial.println("Correct Button Pressed");
+   }
    return true;
 }
 
@@ -101,4 +115,29 @@ int buttonMatch(int ledPin){
     return B3;
   else if ( ledPin == L4 )
     return B4;
+}
+
+// Helper function to check correct button is pressed
+bool checkButton(int btn){
+  if(B1 == btn and b1_val == LOW){
+    Serial.println("Passed");
+    Serial.println(b1_val);
+    return true;
+  }
+  if(B2 == btn and b2_val == LOW){
+    Serial.println("Passed");
+    Serial.println(b2_val);
+    return true;
+  }
+  if(B3 == btn and b3_val == LOW){
+    Serial.println("Passed");
+    Serial.println(b3_val);
+    return true;
+  }
+  if(B4 == btn and b4_val == LOW){
+    Serial.println("Passed");
+    Serial.println(b4_val);
+    return true;
+  }
+  return false;
 }
