@@ -21,7 +21,7 @@
 #define B3 4
 #define B4 5
 
-bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
+
 void setup() {
   Serial.begin(9600);
   
@@ -45,7 +45,7 @@ void setup() {
 void loop() {
   
   // Read the pushbutton values
- // bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
+  bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   Serial.println("Game begins");
   Serial.println(b1_val);
  
@@ -73,11 +73,14 @@ bool levelOne(){
     
     // Wait for button press
     while(1){
-        Serial.println("waiting");         
+       // Serial.println(correctButton);         
         if(checkButton(correctButton))
           break;
+     
      }
      Serial.println("Correct Button Pressed");
+     
+     delay(800);    // Delay time to register single button pressing multiple times
    }
    return true;
 }
@@ -119,25 +122,34 @@ int buttonMatch(int ledPin){
 
 // Helper function to check correct button is pressed
 bool checkButton(int btn){
+  bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   if(B1 == btn and b1_val == LOW){
     Serial.println("Passed");
     Serial.println(b1_val);
+    digitalWrite(L1, HIGH);
     return true;
   }
+  digitalWrite(L1, LOW);
   if(B2 == btn and b2_val == LOW){
     Serial.println("Passed");
     Serial.println(b2_val);
+    digitalWrite(L2, HIGH);
     return true;
   }
+  digitalWrite(L2, LOW);
   if(B3 == btn and b3_val == LOW){
     Serial.println("Passed");
     Serial.println(b3_val);
+    digitalWrite(L3, HIGH);
     return true;
   }
+  digitalWrite(L3, LOW);
   if(B4 == btn and b4_val == LOW){
     Serial.println("Passed");
     Serial.println(b4_val);
+    digitalWrite(L4, HIGH);
     return true;
   }
+  digitalWrite(L3, LOW);
   return false;
 }
