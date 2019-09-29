@@ -47,16 +47,13 @@ void loop() {
   bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   Serial.println("Game begins");
   Serial.println(b1_val);
-   if( b1_val == LOW )
-    Serial.println("button works");
-  else
-    Serial.println("Nope");
+ 
   if(levelOne()){
     Serial.println("Success");    
   }
 
   delay(800);
-  //exit(0);
+  
 }
 
 // Level one pattern display and match check
