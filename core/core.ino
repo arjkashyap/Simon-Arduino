@@ -1,10 +1,5 @@
 // Main Module
 
-// Start debuging from lvl 1 function line 97
-// Wire for Buttons is not there
-// Led response does not reset to low.
-
-
 // LED Pattern pins
 #define L1 8
 #define L2 9
@@ -50,10 +45,11 @@ void loop() {
   Serial.println(b1_val);
  
   if(levelOne()){
-    Serial.println("Success");    
+    Serial.println("All correct Buttons pressed");    
   }
 
   delay(800);
+  
   exit(0);
 }
 
@@ -67,20 +63,19 @@ bool levelOne(){
    for(int i = 0; i < limit; i++){
     Serial.println(ptrn[i]);
     correctButton = buttonMatch(ptrn[i]);           // Stores the correct choice for button
-    Serial.print("Button required : ");
-    Serial.println(correctButton);
-    // Check if the incorrect button is pressed
     
-    // Wait for button press
+    // Check if the incorrect button is pressed
+    // Set Wait for button press
     while(1){
        // Serial.println(correctButton);         
         if(checkButton(correctButton))
           break;
-     
+        
      }
      Serial.println("Correct Button Pressed");
      
      delay(800);    // Delay time to register single button pressing multiple times
+     resetLeds();
    }
    return true;
 }
@@ -129,27 +124,35 @@ bool checkButton(int btn){
     digitalWrite(L1, HIGH);
     return true;
   }
-  digitalWrite(L1, LOW);
+
   if(B2 == btn and b2_val == LOW){
     Serial.println("Passed");
     Serial.println(b2_val);
     digitalWrite(L2, HIGH);
     return true;
   }
-  digitalWrite(L2, LOW);
+
   if(B3 == btn and b3_val == LOW){
-    Serial.println("Passed");
-    Serial.println(b3_val);
     digitalWrite(L3, HIGH);
     return true;
   }
-  digitalWrite(L3, LOW);
+
   if(B4 == btn and b4_val == LOW){
     Serial.println("Passed");
     Serial.println(b4_val);
     digitalWrite(L4, HIGH);
+    
     return true;
   }
+
+  if( b1_val == HIGH || b2_val == HIGH || b3_val == HIGH || b4_val == HIGH )
+    return false;
+}
+
+// Helper function for turning off all Leds at once
+void resetLeds(){
+  digitalWrite(L1, LOW);
+  digitalWrite(L2, LOW);
   digitalWrite(L3, LOW);
-  return false;
+  digitalWrite(L4, LOW);  
 }
