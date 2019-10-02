@@ -45,11 +45,15 @@ void loop() {
   Serial.println(b1_val);
  
   if(levelOne()){
-    Serial.println("All correct Buttons pressed");    
+    Serial.println("All correct Buttons pressed");
+    digitalWrite(L6, HIGH);    
   }
-
-  delay(800);
+  else{
+    Serial.println("Button - Incorrect \n Game Over");
+    digitalWrite(L5, HIGH);
+  }
   
+  delay(800);
   exit(0);
 }
 
@@ -67,10 +71,12 @@ bool levelOne(){
     // Check if the incorrect button is pressed
     // Set Wait for button press
     while(1){
-       // Serial.println(correctButton);         
-        if(checkButton(correctButton))
+       // Serial.println(correctButton);
+        int btnVar = checkButton(correctButton);       
+        if( btnVar == 1 )       // Correct button is pressed
           break;
-        
+        if( btnVar == 2 )       // Incorrect Button pressed
+          return false;
      }
      Serial.println("Correct Button Pressed");
      
@@ -116,25 +122,28 @@ int buttonMatch(int ledPin){
 }
 
 // Helper function to check correct button is pressed
-bool checkButton(int btn){
+// Returns 1 if correct button is pressed
+// Returns 2 if button pressed is incorrect
+// Returns 0 by default
+int checkButton(int btn){
   bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   if(B1 == btn and b1_val == LOW){
     Serial.println("Passed");
     Serial.println(b1_val);
     digitalWrite(L1, HIGH);
-    return true;
+    return 1;
   }
 
   if(B2 == btn and b2_val == LOW){
     Serial.println("Passed");
     Serial.println(b2_val);
     digitalWrite(L2, HIGH);
-    return true;
+    return 1;
   }
 
   if(B3 == btn and b3_val == LOW){
     digitalWrite(L3, HIGH);
-    return true;
+    return 1;
   }
 
   if(B4 == btn and b4_val == LOW){
@@ -142,11 +151,13 @@ bool checkButton(int btn){
     Serial.println(b4_val);
     digitalWrite(L4, HIGH);
     
-    return true;
+    return 1;
   }
-
-  if( b1_val == HIGH || b2_val == HIGH || b3_val == HIGH || b4_val == HIGH )
-    return false;
+  // Wrong button pressed 
+  if( B1 != btn && b1_val == LOW || B2 != btn && b2_val == LOW || B3 != btn && b3_val == LOW || B4 != btn && b4_val == LOW)
+    return 2;
+  
+  return 0;
 }
 
 // Helper function for turning off all Leds at once
