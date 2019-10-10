@@ -16,6 +16,7 @@
 #define B3 4
 #define B4 5
 
+int score = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -35,36 +36,32 @@ void setup() {
   // LED Pins for game state (Correct/Game-Over)
   pinMode(L5, OUTPUT);
   pinMode(L6, OUTPUT);
+
+  // psedo random seq initialize
+  randomSeed(analogRead(0));
 }
 
 void loop() {
   
   // Read the pushbutton values
   bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
+  
   Serial.println("Game begins");
   Serial.println(b1_val);
   
   int startLevel = 1;          // Game starts at level 1
   int startLimit = 4;         // Number of led blinks at level 1
   
-  /*
-  if(levelDesign(initialLvl, initalLimit)){
-    Serial.println("All correct Buttons pressed");
-    digitalWrite(L6, HIGH);    
-  }
-  else{
-    Serial.println("Button - Incorrect \n Game Over");
-    digitalWrite(L5, HIGH);
-  }
-  */
 
   while(1){
     if(levelDesign(startLevel, startLimit)){
       digitalWrite(L6, HIGH);
       delay(1200);
       digitalWrite(L6, LOW);
+      delay(1000);
       startLevel ++;
       startLimit ++;
+      score += 10;
     }
     else
       break;
@@ -72,6 +69,8 @@ void loop() {
  
   Serial.println("Pattern incorrect");
   digitalWrite(L5, HIGH);
+  Serial.print("Score: ");
+  Serial.println(score);
   delay(800);
   exit(0);
 }
