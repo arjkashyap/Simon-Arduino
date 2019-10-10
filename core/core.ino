@@ -43,8 +43,12 @@ void loop() {
   bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   Serial.println("Game begins");
   Serial.println(b1_val);
- 
-  if(levelOne()){
+  
+  int startLevel = 1;          // Game starts at level 1
+  int startLimit = 4;         // Number of led blinks at level 1
+  
+  /*
+  if(levelDesign(initialLvl, initalLimit)){
     Serial.println("All correct Buttons pressed");
     digitalWrite(L6, HIGH);    
   }
@@ -52,18 +56,34 @@ void loop() {
     Serial.println("Button - Incorrect \n Game Over");
     digitalWrite(L5, HIGH);
   }
-  
+  */
+
+  while(1){
+    if(levelDesign(startLevel, startLimit)){
+      digitalWrite(L6, HIGH);
+      delay(1200);
+      digitalWrite(L6, LOW);
+      startLevel ++;
+      startLimit ++;
+    }
+    else
+      break;
+  }
+ 
+  Serial.println("Pattern incorrect");
+  digitalWrite(L5, HIGH);
   delay(800);
   exit(0);
 }
 
 // Level one pattern display and match check
-bool levelOne(){
+bool levelDesign(int level, int limit){
   // Display Led pattern for level one
+   // int limit = 4;
+   int correctButton = 0;
    
-   int limit = 4, correctButton = 0;
    int ptrn[limit];
-   displayPattern(1, ptrn, limit);
+   displayPattern(level, ptrn, limit);
    for(int i = 0; i < limit; i++){
     Serial.println(ptrn[i]);
     correctButton = buttonMatch(ptrn[i]);           // Stores the correct choice for button
@@ -83,6 +103,8 @@ bool levelOne(){
      delay(800);    // Delay time to register single button pressing multiple times
      resetLeds();
    }
+   limit += 2;
+   
    return true;
 }
 
