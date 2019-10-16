@@ -1,6 +1,8 @@
 This is a LED and Punch Button based interactive game. 
 Makes a perfect little project to get started in IOT
 
+![Circuit Schematics](https://raw.githubusercontent.com/bing101/Follow-The-Light/master/Circuit.PNG)
+
 Requirements:
     1) Arduino UNO
     2) 6 LED(s) ( 4 Blue, 1 Red, 1 Green )
@@ -17,13 +19,10 @@ Game-play:
     in a particular combination one by one. Once they stop, 
     you have to press the the buttons in the same combination 
     which will set them on/off in the same pattern.
-    
     Green light indicates that the correct pattern has been 
     entered an you proceed to the next pattern
-    
     Red light indicates you have entered the incorrect pattern
     i;e game-over.
-    
     With each level, the pattern will become more and more difficult 
     to follow.
 
