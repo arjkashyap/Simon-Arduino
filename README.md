@@ -10,7 +10,12 @@ How to setup:
     Follow the Circuit Diagram From Circuit.png.
     The connections are pretty Easy.
     Connect the Arduiono to computer and Upload the code.
+    Additional updates will me made to the project throughout the
+    dev, but the core circuit diagram will remain the same.
     ( Do check the port before uploading from tools > port )
+    Connect the com port to the arduino and then load the code
+    of the game.
+
     
 Game-play:
     Once the game starts, the led's will blink on and off
