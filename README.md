@@ -3,12 +3,13 @@ Makes a perfect little project to get started in IOT
 
 ![Circuit Schematics](https://raw.githubusercontent.com/bing101/Follow-The-Light/master/Circuit.PNG)
 
-Requirements:
-    1) Arduino UNO
-    2) 6 LED(s) ( 4 Blue, 1 Red, 1 Green )
-    3) 4 Punch Buttons
+Requirements: <br/>
+    1) Arduino UNO <br/>
+    2) 6 LED(s) ( 4 Blue, 1 Red, 1 Green ) <br/>
+    3) 4 Punch Buttons <br/>
 
 How to setup:
+    <br/>
     Follow the Circuit Diagram From Circuit.png.
     The connections are pretty Easy.
     Connect the Arduiono to computer and Upload the code.
@@ -20,6 +21,7 @@ How to setup:
 
     
 Game-play:
+    <br/>
     Once the game starts, the led's will blink on and off
     in a particular combination one by one. Once they stop, 
     you have to press the the buttons in the same combination 
@@ -32,6 +34,7 @@ Game-play:
     to follow.
 
 Additional components: 
+    <br/>
     Since the project is in development stage, more features
     can be added.
     Example an LCD screen indicating score and current level etc.
