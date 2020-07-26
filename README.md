@@ -38,7 +38,7 @@ i;e game-over.
 With each level, the pattern will become more and more difficult 
 </p>
 ## Additional components: 
-    <br/>
+<br/>
 <p>
 Since the project is in development stage, more features
 can be added.
