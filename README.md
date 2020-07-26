@@ -1,7 +1,9 @@
 # Follow The Light
 This is a LED and Punch Button based interactive game. 
 Makes a perfect little project to get started in IOT
+
 <br/>
+
 ![Circuit Schematics](https://raw.githubusercontent.com/bing101/Follow-The-Light/master/Circuit.PNG)
 <hr/>
 
@@ -12,7 +14,7 @@ Makes a perfect little project to get started in IOT
 <hr/>
 
 ## How to setup:
-    <br/>
+
 <p>
 Follow the Circuit Diagram From Circuit.png.
 The connections are pretty Easy.
@@ -23,9 +25,11 @@ dev, but the core circuit diagram will remain the same.
 Connect the com port to the arduino and then load the code
 of the game.
 </p>
-    
+  
+<hr/>
+
 ## Game-play:
-<br/>
+
 <p>
 Once the game starts, the led's will blink on and off
 in a particular combination one by one. Once they stop, 
