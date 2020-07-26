@@ -1,7 +1,7 @@
 # Follow The Light
 This is a LED and Punch Button based interactive game. 
 Makes a perfect little project to get started in IOT
-
+<br/>
 ![Circuit Schematics](https://raw.githubusercontent.com/bing101/Follow-The-Light/master/Circuit.PNG)
 <hr/>
 
@@ -37,8 +37,12 @@ Red light indicates you have entered the incorrect pattern
 i;e game-over.
 With each level, the pattern will become more and more difficult 
 </p>
+
+<hr/>
+
 ## Additional components: 
 <br/>
+
 <p>
 Since the project is in development stage, more features
 can be added.
