@@ -24,7 +24,7 @@ Makes a perfect little project to get started in IOT
     
 ## Game-play:
     <br/>
-    <p>
+
     Once the game starts, the led's will blink on and off
     in a particular combination one by one. Once they stop, 
     you have to press the the buttons in the same combination 
@@ -34,13 +34,12 @@ Makes a perfect little project to get started in IOT
     Red light indicates you have entered the incorrect pattern
     i;e game-over.
     With each level, the pattern will become more and more difficult 
-    to follow.
-    <p>
+
 ## Additional components: 
     <br/>
-    <p>
+
     Since the project is in development stage, more features
     can be added.
     Example an LCD screen indicating score and current level etc.
     That being said the prototype is complete and the game is playable.
-    <p>
+ 
