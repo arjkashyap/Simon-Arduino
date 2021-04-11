@@ -90,20 +90,27 @@ void loop() {
         startLevel ++;
         startLimit ++;
         score += 10;
+
+        // game complete
+        if(currentLevel == 5)
+          break;
+        
       }
       else{
         // Incorrect answer
-  
         break;
       }
       
     }
-   
-    Serial.println("Pattern incorrect");
-    digitalWrite(L5, HIGH);
+
+    // If the game is not complete
+    if(currentLevel != 5)
+      digitalWrite(L5, HIGH);
+      
     Serial.print("Score: ");
     Serial.println(score);
     delay(2000);
+    
     resetProgressBar();
     
     digitalWrite(L5, LOW);
@@ -141,22 +148,29 @@ void setProgressBar(int currentLevel)
 }
 
 
-// function switches off all the lights on progress bar 
-void resetProgressBar()
+void gameEndEffect(int level)
 {
-  Serial.println("Reset progress bar");
+    // Function runs a blink effect on 
+    // the progress bar
   int k = 0;
-  while(k < 5){
-      for(int i = 0; i < currentLevel; i++){
+  while(k < 7){
+      for(int i = 0; i < level; i++){
         digitalWrite(progressBar[i], LOW);
         delay(100);
       }
-      for(int i = 0; i < currentLevel; i++){
+      for(int i = 0; i < level; i++){
         digitalWrite(progressBar[i], HIGH);
         delay(100);
       }
     k += 1;
-    }
+    } 
+}
+
+// function switches off all the lights on progress bar 
+void resetProgressBar()
+{
+  Serial.println("Reset progress bar");
+  gameEndEffect(currentLevel);
   for(int i = 0; i < progressBarSize; i++){
       digitalWrite(progressBar[i], LOW);
    }
@@ -191,7 +205,7 @@ bool levelDesign(int level, int limit){
      resetLeds();
    }
    limit += 2;
-   currentLevel+=1;   // first level is cleared
+   currentLevel+=1;   // level is cleared
    return true;
 }
 
