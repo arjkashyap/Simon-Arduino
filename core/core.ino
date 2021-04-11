@@ -39,6 +39,8 @@ void setup() {
   pinMode(B3, INPUT_PULLUP);
   pinMode(B4, INPUT_PULLUP);
 
+  pinMode(stateBtn, INPUT_PULLUP);
+
   // LEDPins for Pattern
   pinMode(L1, OUTPUT);
   pinMode(L2, OUTPUT);
@@ -62,44 +64,67 @@ void setup() {
 }
 
 void loop() {
-  setProgressBar(currentLevel);
-  // Read the pushbutton values
-  bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
-  
-  Serial.println("Game begins");
-  Serial.println(b1_val);
-  
-  int startLevel = 1;          // Game starts at level 1
-  int startLimit = 4;         // Number of led blinks at level 1
-  
-
-  while(1){
-    if(levelDesign(startLevel, startLimit)){
-        // set progress indicator
-      setProgressBar(currentLevel);
-      digitalWrite(L6, HIGH);
-      delay(1200);
-      digitalWrite(L6, LOW);
-      delay(1000);
-      startLevel ++;
-      startLimit ++;
-      score += 10;
-    }
-    else{
-      // Incorrect answer
-
-      break;
-    }
+//  Serial.println(digitalRead(stateBtn));
+  handleGameState();
+  if(gameState == HIGH){
+    delay(2000);
+    setProgressBar(currentLevel);
+    // Read the pushbutton values
+    bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
     
+    Serial.println("Game begins");
+    Serial.println(b1_val);
+    
+    int startLevel = 1;          // Game starts at level 1
+    int startLimit = 4;         // Number of led blinks at level 1
+    
+  
+    while(1){
+      if(levelDesign(startLevel, startLimit)){
+          // set progress indicator
+        setProgressBar(currentLevel);
+        digitalWrite(L6, HIGH);
+        delay(1200);
+        digitalWrite(L6, LOW);
+        delay(1000);
+        startLevel ++;
+        startLimit ++;
+        score += 10;
+      }
+      else{
+        // Incorrect answer
+  
+        break;
+      }
+      
+    }
+   
+    Serial.println("Pattern incorrect");
+    digitalWrite(L5, HIGH);
+    Serial.print("Score: ");
+    Serial.println(score);
+    delay(2000);
+    resetProgressBar();
+    
+    digitalWrite(L5, LOW);
+    digitalWrite(L6, LOW);
+    
+    gameState = 0;
+    }
+}
+
+// listens to the game start button and changes the state
+void handleGameState()
+{
+  if(digitalRead(stateBtn) == LOW){
+    Serial.println("Game state change button pushed");
+    Serial.println("Changing Game state . . . .");
+    gameState = 1;
+    Serial.println(gameState);
   }
- 
-  Serial.println("Pattern incorrect");
-  digitalWrite(L5, HIGH);
-  Serial.print("Score: ");
-  Serial.println(score);
-  delay(2000);
-  resetProgressBar();
-  exit(0);
+  
+  
+  
 }
 
 // Function lights the leds asper the level on bar
@@ -132,12 +157,10 @@ void resetProgressBar()
       }
     k += 1;
     }
-
-
-  
   for(int i = 0; i < progressBarSize; i++){
-      digitalWrite(progressBar[i], LOW);  
+      digitalWrite(progressBar[i], LOW);
    }
+   currentLevel = 0;
 }
 
 // Level one pattern display and match check
