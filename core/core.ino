@@ -19,7 +19,16 @@
 #define B3 4
 #define B4 5
 
+#define stateBtn 12     // push button for changing game state
+
+int gameState = 0;      // 1 -> being played, 0 -> at rest
+
 int score = 0;
+int currentLevel = 0;
+
+// Analogue pins specify progress bar
+int progressBarSize = 6;
+int progressBar[6] = {14, 15, 16, 17, 18, 19};
 
 void setup() {
   Serial.begin(9600);
@@ -40,12 +49,20 @@ void setup() {
   pinMode(L5, OUTPUT);
   pinMode(L6, OUTPUT);
 
+//  level indicators
+  pinMode(A0, OUTPUT);
+  pinMode(A1, OUTPUT);
+  pinMode(A2, OUTPUT);
+  pinMode(A3, OUTPUT);
+  pinMode(A4, OUTPUT);
+  pinMode(A5, OUTPUT);
+
   // psedo random seq initialize
   randomSeed(analogRead(0));
 }
 
 void loop() {
-  
+  setProgressBar(currentLevel);
   // Read the pushbutton values
   bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
   
@@ -58,6 +75,8 @@ void loop() {
 
   while(1){
     if(levelDesign(startLevel, startLimit)){
+        // set progress indicator
+      setProgressBar(currentLevel);
       digitalWrite(L6, HIGH);
       delay(1200);
       digitalWrite(L6, LOW);
@@ -66,16 +85,59 @@ void loop() {
       startLimit ++;
       score += 10;
     }
-    else
+    else{
+      // Incorrect answer
+
       break;
+    }
+    
   }
  
   Serial.println("Pattern incorrect");
   digitalWrite(L5, HIGH);
   Serial.print("Score: ");
   Serial.println(score);
-  delay(800);
+  delay(2000);
+  resetProgressBar();
   exit(0);
+}
+
+// Function lights the leds asper the level on bar
+void setProgressBar(int currentLevel)
+{
+   Serial.println("Progress Bar setting function run . . .");
+   int i = 0;
+   while(i < currentLevel && i < progressBarSize){
+      Serial.println(i);
+       digitalWrite(progressBar[i], HIGH);     // switch on led
+   
+       i++;
+   }
+}
+
+
+// function switches off all the lights on progress bar 
+void resetProgressBar()
+{
+  Serial.println("Reset progress bar");
+  int k = 0;
+  while(k < 5){
+      for(int i = 0; i < currentLevel; i++){
+        digitalWrite(progressBar[i], LOW);
+        delay(100);
+      }
+      for(int i = 0; i < currentLevel; i++){
+        digitalWrite(progressBar[i], HIGH);
+        delay(100);
+      }
+    k += 1;
+    }
+
+
+  
+  for(int i = 0; i < progressBarSize; i++){
+      digitalWrite(progressBar[i], LOW);  
+   }
 }
 
 // Level one pattern display and match check
@@ -106,7 +168,7 @@ bool levelDesign(int level, int limit){
      resetLeds();
    }
    limit += 2;
-   
+   currentLevel+=1;   // first level is cleared
    return true;
 }
 
