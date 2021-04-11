@@ -37,7 +37,7 @@ void setProgressBar(int currentLevel)
    while(i < currentLevel && i < progressBarSize){
       Serial.println(i);
        digitalWrite(progressBar[i], HIGH);     // switch on led
-      // delay(500);      // for testing purpose only
+   
        i++;
    }
 }
