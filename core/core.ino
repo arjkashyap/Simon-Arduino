@@ -1,5 +1,4 @@
-
-
+#include <EEPROM.h>
 
 // Main Module
 
@@ -21,6 +20,11 @@
 
 #define stateBtn 12     // push button for changing game state
 
+
+const int highScoreAddress = 0; // memory address of high score 
+int highScore = 0;
+//int highScore = EEPROM.read(highScoreAddress);
+
 int gameState = 0;      // 1 -> being played, 0 -> at rest
 
 int score = 0;
@@ -32,6 +36,12 @@ int progressBar[6] = {14, 15, 16, 17, 18, 19};
 
 void setup() {
   Serial.begin(9600);
+
+//  EEPROM.write(highScoreAddress, 1);    // Store 0 as high score, run this only once
+  highScore = EEPROM.read(highScoreAddress);
+
+Serial.println("High scroe");
+Serial.println(highScore);
   
   // Push button pins
   pinMode(B1, INPUT_PULLUP);
@@ -51,7 +61,7 @@ void setup() {
   pinMode(L5, OUTPUT);
   pinMode(L6, OUTPUT);
 
-//  level indicators
+  //  level indicators
   pinMode(A0, OUTPUT);
   pinMode(A1, OUTPUT);
   pinMode(A2, OUTPUT);
@@ -64,24 +74,26 @@ void setup() {
 }
 
 void loop() {
-//  Serial.println(digitalRead(stateBtn));
+  //  Serial.println(digitalRead(stateBtn));
   handleGameState();
-  if(gameState == HIGH){
+  setHighScoreDisp();
+  if (gameState == HIGH) {
+    resetProgressBar();
     delay(2000);
     setProgressBar(currentLevel);
     // Read the pushbutton values
     bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
-    
+
     Serial.println("Game begins");
     Serial.println(b1_val);
-    
+
     int startLevel = 1;          // Game starts at level 1
     int startLimit = 4;         // Number of led blinks at level 1
-    
-  
-    while(1){
-      if(levelDesign(startLevel, startLimit)){
-          // set progress indicator
+
+
+    while (1) {
+      if (levelDesign(startLevel, startLimit)) {
+        // set progress indicator
         setProgressBar(currentLevel);
         digitalWrite(L6, HIGH);
         delay(1200);
@@ -92,149 +104,162 @@ void loop() {
         score += 10;
 
         // game complete
-        if(currentLevel == 5)
+        if (currentLevel == 5)
           break;
-        
+
       }
-      else{
+      else {
         // Incorrect answer
         break;
       }
-      
+
     }
 
+    
+    if(currentLevel > highScore){
+        highScore = currentLevel;
+        EEPROM.write(highScoreAddress, highScore);  // update high score 
+    }
+    
     // If the game is not complete
-    if(currentLevel != 5)
+    if (currentLevel != 5)
       digitalWrite(L5, HIGH);
-      
+
     Serial.print("Score: ");
     Serial.println(score);
     delay(2000);
-    
+
     resetProgressBar();
-    
+
     digitalWrite(L5, LOW);
     digitalWrite(L6, LOW);
-    
+
     gameState = 0;
-    }
+  }
+}
+
+// Show high score on progress bar
+void setHighScoreDisp()
+{
+  for(int i = 0; i < highScore; i++)
+      digitalWrite(progressBar[i], HIGH);
 }
 
 // listens to the game start button and changes the state
 void handleGameState()
 {
-  if(digitalRead(stateBtn) == LOW){
+  if (digitalRead(stateBtn) == LOW) {
     Serial.println("Game state change button pushed");
     Serial.println("Changing Game state . . . .");
     gameState = 1;
     Serial.println(gameState);
   }
-  
-  
-  
+
+
+
 }
 
 // Function lights the leds asper the level on bar
 void setProgressBar(int currentLevel)
 {
-   Serial.println("Progress Bar setting function run . . .");
-   int i = 0;
-   while(i < currentLevel && i < progressBarSize){
-      Serial.println(i);
-       digitalWrite(progressBar[i], HIGH);     // switch on led
-   
-       i++;
-   }
+  Serial.println("Progress Bar setting function run . . .");
+  int i = 0;
+  while (i < currentLevel && i < progressBarSize) {
+    Serial.println(i);
+    digitalWrite(progressBar[i], HIGH);     // switch on led
+
+    i++;
+  }
 }
 
 
 void gameEndEffect(int level)
 {
-    // Function runs a blink effect on 
-    // the progress bar
+  // Function runs a blink effect on
+  // the progress bar
   int k = 0;
-  while(k < 7){
-      for(int i = 0; i < level; i++){
-        digitalWrite(progressBar[i], LOW);
-        delay(100);
-      }
-      for(int i = 0; i < level; i++){
-        digitalWrite(progressBar[i], HIGH);
-        delay(100);
-      }
+  while (k < 7) {
+    for (int i = 0; i < level; i++) {
+      digitalWrite(progressBar[i], LOW);
+      delay(100);
+    }
+    for (int i = 0; i < level; i++) {
+      digitalWrite(progressBar[i], HIGH);
+      delay(100);
+    }
     k += 1;
-    } 
+  }
 }
 
-// function switches off all the lights on progress bar 
+// function switches off all the lights on progress bar
 void resetProgressBar()
 {
   Serial.println("Reset progress bar");
   gameEndEffect(currentLevel);
-  for(int i = 0; i < progressBarSize; i++){
-      digitalWrite(progressBar[i], LOW);
-   }
-   currentLevel = 0;
+  for (int i = 0; i < progressBarSize; i++) {
+    digitalWrite(progressBar[i], LOW);
+  }
+  currentLevel = 0;
 }
 
 // Level one pattern display and match check
-bool levelDesign(int level, int limit){
+bool levelDesign(int level, int limit) {
   // Display Led pattern for level one
-   // int limit = 4;
-   int correctButton = 0;
-   
-   int ptrn[limit];
-   displayPattern(level, ptrn, limit);
-   for(int i = 0; i < limit; i++){
+  // int limit = 4;
+  int correctButton = 0;
+
+  int ptrn[limit];
+  displayPattern(level, ptrn, limit);
+  for (int i = 0; i < limit; i++) {
     Serial.println(ptrn[i]);
     correctButton = buttonMatch(ptrn[i]);           // Stores the correct choice for button
-    
+
     // Check if the incorrect button is pressed
     // Set Wait for button press
-    while(1){
-       // Serial.println(correctButton);
-        int btnVar = checkButton(correctButton);       
-        if( btnVar == 1 )       // Correct button is pressed
-          break;
-        if( btnVar == 2 )       // Incorrect Button pressed
-          return false;
-     }
-     Serial.println("Correct Button Pressed");
-     
-     delay(800);    // Delay time to register single button pressing multiple times
-     resetLeds();
-   }
-   limit += 2;
-   currentLevel+=1;   // level is cleared
-   return true;
+    while (1) {
+      // Serial.println(correctButton);
+      int btnVar = checkButton(correctButton);
+      if ( btnVar == 1 )      // Correct button is pressed
+        break;
+      if ( btnVar == 2 )      // Incorrect Button pressed
+        return false;
+    }
+    Serial.println("Correct Button Pressed");
+
+    delay(800);    // Delay time to register single button pressing multiple times
+    resetLeds();
+  }
+  limit += 2;
+  currentLevel += 1; // level is cleared
+  return true;
 }
 
 // Displays Led blink pattern for a level
-void displayPattern(int lvl, int ptrn[], int limit){
+void displayPattern(int lvl, int ptrn[], int limit) {
   Serial.println("Function displayPattern");
   int delayTime;
   int correctButton;
-  if(lvl == 1){
+  if (lvl == 1) {
     delayTime = 500;
   }
- 
-  for( int i = 0; i < limit; i++ ){
+
+  for ( int i = 0; i < limit; i++ ) {
     int pin = random(L1, L4 + 1);         // Choose a random led pin
     Serial.println(pin);
     ptrn[i] = pin;
-    digitalWrite(pin, HIGH);              
+    digitalWrite(pin, HIGH);
     delay(delayTime);
     digitalWrite(pin, LOW);
     delay(delayTime);
   }
   Serial.println("Pattern complete");
-  
+
   return;
 }
 
 // Finds the button required to be pressed for a led pin passed as variable
-int buttonMatch(int ledPin){
-  if(ledPin == L1)
+int buttonMatch(int ledPin) {
+  if (ledPin == L1)
     return B1;
   else if ( ledPin == L2 )
     return B2;
@@ -248,45 +273,45 @@ int buttonMatch(int ledPin){
 // Returns 1 if correct button is pressed
 // Returns 2 if button pressed is incorrect
 // Returns 0 by default
-int checkButton(int btn){
+int checkButton(int btn) {
   bool b1_val = digitalRead(B1), b2_val = digitalRead(B2), b3_val = digitalRead(B3), b4_val = digitalRead(B4);
-  if(B1 == btn and b1_val == LOW){
+  if (B1 == btn and b1_val == LOW) {
     Serial.println("Passed");
     Serial.println(b1_val);
     digitalWrite(L1, HIGH);
     return 1;
   }
 
-  if(B2 == btn and b2_val == LOW){
+  if (B2 == btn and b2_val == LOW) {
     Serial.println("Passed");
     Serial.println(b2_val);
     digitalWrite(L2, HIGH);
     return 1;
   }
 
-  if(B3 == btn and b3_val == LOW){
+  if (B3 == btn and b3_val == LOW) {
     digitalWrite(L3, HIGH);
     return 1;
   }
 
-  if(B4 == btn and b4_val == LOW){
+  if (B4 == btn and b4_val == LOW) {
     Serial.println("Passed");
     Serial.println(b4_val);
     digitalWrite(L4, HIGH);
-    
+
     return 1;
   }
-  // Wrong button pressed 
-  if( B1 != btn && b1_val == LOW || B2 != btn && b2_val == LOW || B3 != btn && b3_val == LOW || B4 != btn && b4_val == LOW)
+  // Wrong button pressed
+  if ( B1 != btn && b1_val == LOW || B2 != btn && b2_val == LOW || B3 != btn && b3_val == LOW || B4 != btn && b4_val == LOW)
     return 2;
-  
+
   return 0;
 }
 
 // Helper function for turning off all Leds at once
-void resetLeds(){
+void resetLeds() {
   digitalWrite(L1, LOW);
   digitalWrite(L2, LOW);
   digitalWrite(L3, LOW);
-  digitalWrite(L4, LOW);  
+  digitalWrite(L4, LOW);
 }
