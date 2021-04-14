@@ -30,8 +30,8 @@ int score = 0;
 int currentLevel = 0;
 
 // Analogue pins specify progress bar
-int progressBarSize = 6;
-int progressBar[6] = {14, 15, 16, 17, 18, 19};
+int progressBarSize = 5;
+int progressBar[5] = {14, 15, 16, 17, 19};
 
 void setup() {
   Serial.begin(9600);
@@ -99,7 +99,7 @@ void loop() {
         digitalWrite(L6, LOW);
         delay(1000);
         startLevel ++;
-        startLimit ++;
+        startLimit += 2;
         score += 10;
 
         // game complete
