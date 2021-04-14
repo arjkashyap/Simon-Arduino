@@ -22,7 +22,7 @@ void setup()
 void loop() 
 {
 
-//  Serial.println("works ?");
+  Serial.println("works ?");
     digitalWrite(L1, HIGH);
     digitalWrite(L2, HIGH);
     digitalWrite(L3, HIGH);

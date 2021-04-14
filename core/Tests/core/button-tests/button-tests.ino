@@ -1,11 +1,15 @@
 
-const int btnPin = 8;
+const int btnPin = 12;
+
+
 
 void setup() 
 {
   Serial.begin(9600);
 
   pinMode(btnPin, INPUT_PULLUP);
+
+
 
 }
 

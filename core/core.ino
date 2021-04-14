@@ -1,6 +1,5 @@
 #include <EEPROM.h>
 
-// Main Module
 
 // LED Pattern pins
 #define L1 8
@@ -8,7 +7,7 @@
 #define L3 10
 #define L4 11
 
-// LED Game-state pins
+// LED Solution checker pins
 #define L5 6            // Red
 #define L6 7           // Green
 
@@ -18,7 +17,7 @@
 #define B3 4
 #define B4 5
 
-#define stateBtn 12     // push button for changing game state
+#define stateBtn 12     // push button for changing game state to play
 
 
 const int highScoreAddress = 0; // memory address of high score 
